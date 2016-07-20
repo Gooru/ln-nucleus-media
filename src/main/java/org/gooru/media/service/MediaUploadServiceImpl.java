@@ -33,6 +33,7 @@ public class MediaUploadServiceImpl implements MediaUploadService {
         String fileName = null;
         String entityType = context.request().getParam(RouteConstants.ENTITY_TYPE);
         String url = context.request().getParam(RouteConstants.URL);
+        String contentType = FileUploadConstants.CONTENT_TYPE_DEFAULT;
 
         if (url != null && !url.isEmpty()) {
             response = UploadValidationUtils.validateFileUrl(url, response);
@@ -53,10 +54,11 @@ public class MediaUploadServiceImpl implements MediaUploadService {
                 LOG.info("Orginal file name : " + f.fileName() + " Uploaded file name in file system : "
                     + f.uploadedFileName());
                 fileName = renameFile(f.fileName(), f.uploadedFileName());
+                contentType = f.contentType();
             }
         }
         if (fileName != null) {
-            return s3Client.uploadFileS3(uploadLocation, entityType, fileName, response);
+            return s3Client.uploadFileS3(uploadLocation, entityType, fileName, response, contentType);
         }
         return null;
     }
