@@ -51,10 +51,11 @@ public class MediaUploadServiceImpl implements MediaUploadService {
             }
 
             for (FileUpload f : files) {
-                LOG.info("Orginal file name : " + f.fileName() + " Uploaded file name in file system : "
+                LOG.info("Original file name : " + f.fileName() + " Uploaded file name in file system : "
                     + f.uploadedFileName());
                 fileName = renameFile(f.fileName(), f.uploadedFileName());
                 contentType = f.contentType();
+                LOG.debug("content type of the file: {}", contentType);
             }
         }
         if (fileName != null) {
@@ -75,6 +76,9 @@ public class MediaUploadServiceImpl implements MediaUploadService {
                 oldFile.renameTo(newFile);
                 uploadedFileName = newFile.getName();
                 LOG.info("Renamed file name : " + uploadedFileName);
+            } else {
+            	File newFile = new File(uploadedFileName);
+            	uploadedFileName = newFile.getName();
             }
 
         } catch (Exception e) {
