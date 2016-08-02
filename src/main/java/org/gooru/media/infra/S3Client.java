@@ -43,7 +43,7 @@ public final class S3Client implements Initializer {
     }
 
     public UploadResponse uploadFileS3(String fileLocation, String entityType, String fileName,
-        UploadResponse response) {
+        UploadResponse response, String contentType) {
 
         try {
             UploadValidationUtils.validateEntityType(entityType, response);
@@ -58,6 +58,7 @@ public final class S3Client implements Initializer {
             // Upload file to s3
             long start = System.currentTimeMillis();
             S3Object fileObject = new S3Object(fileName, data);
+            fileObject.setContentType(contentType);
             S3Object uploadedObject = restS3Service.putObject(bucketName, fileObject);
 
             if (uploadedObject != null) {
