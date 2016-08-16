@@ -49,6 +49,13 @@ public class MediaUploadServiceImpl implements MediaUploadService {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Context uploaded files : " + files.size());
             }
+            
+            if (files.size() == 0) {
+                LOG.error("No file to upload. Aborting");
+                response.setHasError(true);
+                response.setHttpStatus(HttpStatus.BAD_REQUEST.getCode());
+                return response;
+            }
 
             for (FileUpload f : files) {
                 LOG.info("Original file name : " + f.fileName() + " Uploaded file name in file system : "
@@ -61,7 +68,11 @@ public class MediaUploadServiceImpl implements MediaUploadService {
         if (fileName != null) {
             return s3Client.uploadFileS3(uploadLocation, entityType, fileName, response, contentType);
         }
-        return null;
+        
+        response.setHasError(true);
+        response.setHttpStatus(HttpStatus.ERROR.getCode());
+        LOG.error("file not uploaded, something went wrong");
+        return response;
     }
 
     private String renameFile(String originalFileName, String uploadedFileName) {
