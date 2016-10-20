@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.gooru.media.constants.ErrorsConstants;
 import org.gooru.media.constants.FileUploadConstants;
 import org.gooru.media.constants.HttpConstants.HttpStatus;
 import org.gooru.media.constants.RouteConstants;
@@ -18,6 +19,7 @@ import org.gooru.media.utils.UploadValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.FileUpload;
 import io.vertx.ext.web.RoutingContext;
 
@@ -54,6 +56,7 @@ public class MediaUploadServiceImpl implements MediaUploadService {
                 LOG.error("No file to upload. Aborting");
                 response.setHasError(true);
                 response.setHttpStatus(HttpStatus.BAD_REQUEST.getCode());
+                response.setError(new JsonObject().put(ErrorsConstants.MESSAGE, ErrorsConstants.VE_007));
                 return response;
             }
 
