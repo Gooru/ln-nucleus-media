@@ -9,6 +9,7 @@ import org.gooru.media.constants.ConfigConstants;
 import org.gooru.media.constants.RouteConstants;
 import org.gooru.media.responses.models.UploadResponse;
 import org.gooru.media.utils.UploadValidationUtils;
+import org.jets3t.service.acl.AccessControlList;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 import org.jets3t.service.model.S3Object;
 import org.jets3t.service.security.AWSCredentials;
@@ -59,6 +60,7 @@ public final class S3Client implements Initializer {
             long start = System.currentTimeMillis();
             S3Object fileObject = new S3Object(fileName, data);
             fileObject.setContentType(contentType);
+            fileObject.setAcl(AccessControlList.REST_CANNED_PUBLIC_READ);
             S3Object uploadedObject = restS3Service.putObject(bucketName, fileObject);
 
             if (uploadedObject != null) {
